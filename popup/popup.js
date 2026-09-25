@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const copyFeedback = document.getElementById('copyFeedback');
   const copyIconWrapper = document.getElementById('copyIconWrapper');
   const grabTimeBtn = document.getElementById('grabTimeBtn');
+  const lastDownloadBtn = document.getElementById('lastDownloadBtn');
 
   let currentTab = null;
   let fullCommand = '';
@@ -105,6 +106,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     restrictFilenames.checked = data.restrictFilenames;
     outputDir.value = data.outputDir;
     outputTemplate.value = data.outputTemplate;
+    
+    if (!data.outputDir) {
+      await fetchLastDownloadPath();
+    }
   } catch (err) {
     console.error("Failed to load settings:", err);
   }
@@ -270,6 +275,29 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.error("Failed to grab timestamp:", err);
     }
   });
+
+  // 7.5 Download Path logic
+  async function fetchLastDownloadPath() {
+    try {
+      if (!chrome.downloads) return;
+      const downloads = await chrome.downloads.search({ limit: 1, orderBy: ['-startTime'] });
+      if (downloads && downloads.length > 0) {
+        const filename = downloads[0].filename;
+        const lastSlash = Math.max(filename.lastIndexOf('\\'), filename.lastIndexOf('/'));
+        if (lastSlash !== -1) {
+          outputDir.value = filename.substring(0, lastSlash);
+          saveSettings();
+          generateCommand();
+        }
+      }
+    } catch (err) {
+      console.error("Failed to read downloads", err);
+    }
+  }
+
+  if (lastDownloadBtn) {
+    lastDownloadBtn.addEventListener('click', fetchLastDownloadPath);
+  }
 
   // 8. Copy Chip Logic
   copyChip.addEventListener('click', async () => {
