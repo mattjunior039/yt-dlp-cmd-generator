@@ -143,7 +143,7 @@
       <span class="instruction">Open <strong>Terminal</strong> (Press <code>Cmd + Space</code>, type "Terminal", and hit Enter). Copy and paste this command, then press Enter:</span>
       <div class="code-wrapper">
         <div class="code-block" id="brew-cmd">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</div>
-        <button class="copy-btn" onclick="copyToClipboard('brew-cmd', this)">Copy</button>
+        <button class="copy-btn" data-target="brew-cmd">Copy</button>
       </div>
       <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;"><em>Note: The Terminal might ask for your Mac password. It won't show characters as you type, just type it and press Enter.</em></p>
     </div>
@@ -153,7 +153,7 @@
       <span class="instruction">Once Homebrew is ready, paste this into your <strong>Terminal</strong> and hit Enter:</span>
       <div class="code-wrapper">
         <div class="code-block" id="mac-cmd">brew install yt-dlp ffmpeg</div>
-        <button class="copy-btn" onclick="copyToClipboard('mac-cmd', this)">Copy</button>
+        <button class="copy-btn" data-target="mac-cmd">Copy</button>
       </div>
     </div>
 
@@ -163,7 +163,7 @@
       <div class="code-wrapper">
         <div class="code-block" id="win-cmd">winget install yt-dlp
 winget install gyan.ffmpeg</div>
-        <button class="copy-btn" onclick="copyToClipboard('win-cmd', this)">Copy</button>
+        <button class="copy-btn" data-target="win-cmd">Copy</button>
       </div>
       <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 8px;"><em>If Winget fails, you can download the .exe directly from <a href="https://github.com/yt-dlp/yt-dlp/releases" target="_blank" style="color: var(--primary)">GitHub</a>.</em></p>
     </div>
@@ -175,24 +175,11 @@ winget install gyan.ffmpeg</div>
         <div class="code-block" id="linux-cmd">sudo wget https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -O /usr/local/bin/yt-dlp
 sudo chmod a+rx /usr/local/bin/yt-dlp
 sudo apt update && sudo apt install ffmpeg</div>
-        <button class="copy-btn" onclick="copyToClipboard('linux-cmd', this)">Copy</button>
+        <button class="copy-btn" data-target="linux-cmd">Copy</button>
       </div>
     </div>
 
-    <script>
-      function copyToClipboard(elementId, btn) {
-        const text = document.getElementById(elementId).innerText;
-        navigator.clipboard.writeText(text).then(() => {
-          const originalText = btn.innerText;
-          btn.innerText = 'Copied!';
-          btn.style.backgroundColor = '#10b981'; // Green
-          setTimeout(() => {
-            btn.innerText = originalText;
-            btn.style.backgroundColor = '';
-          }, 2000);
-        });
-      }
-    </script>
+    <script src="install.js"></script>
   </div>
 </body>
 </html>
