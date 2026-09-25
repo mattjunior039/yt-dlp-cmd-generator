@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (mode === 'default') {
       customVideoOptions.style.display = 'none';
       audioOptions.style.display = 'none';
-    } else if (mode === 'custom') {
+    } else if (mode === 'custom' || mode === 'videoOnly') {
       customVideoOptions.style.display = 'flex';
       audioOptions.style.display = 'none';
     } else if (mode === 'audio') {
@@ -191,6 +191,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       const vFormat = videoFormatSelect.value;
       cmd.push(`-f "bv*[height<=${res}]+ba/b"`);
       cmd.push(`--merge-output-format ${vFormat}`);
+    } else if (mode === 'videoOnly') {
+      const res = resolutionSelect.value;
+      const vFormat = videoFormatSelect.value;
+      cmd.push(`-f "bv*[height<=${res}]"`);
+      cmd.push(`--remux-video ${vFormat}`);
     }
 
     if (embedSubs.checked || writeAutoSubs.checked) cmd.push('--write-subs');
