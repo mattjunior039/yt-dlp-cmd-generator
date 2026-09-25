@@ -6,72 +6,90 @@
 </head>
 <body>
   <div class="header">
-    <h2>yt-dlp Generator</h2>
-    <a href="../install.html" target="_blank" class="install-link" title="Installation Guide">ⓘ Install Guide</a>
+    <div class="logo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 15 17 10"></polyline>
+        <line x1="12" y1="15" x2="12" y2="3"></line>
+      </svg>
+      yt-dlp Generator
+    </div>
+    <a href="../install.html" target="_blank" class="install-link" title="Installation Guide">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+      Install Guide
+    </a>
   </div>
   
-  <div class="form-group">
-    <label for="url">Video URL</label>
-    <input type="text" id="url" readonly>
-  </div>
-
-  <div class="form-group">
-    <label for="downloadMode">Download Mode</label>
-    <select id="downloadMode">
-      <option value="default" selected>Best Video + Audio (Default)</option>
-      <option value="custom">Custom Resolution</option>
-      <option value="audio">Extract Audio Only</option>
-    </select>
-  </div>
-
-  <div class="row" id="customVideoOptions" style="display: none;">
+  <div class="card">
     <div class="form-group">
-      <label for="resolution">Max Resolution</label>
-      <select id="resolution">
-        <option value="2160">4K (2160p)</option>
-        <option value="1440">1440p</option>
-        <option value="1080" selected>1080p</option>
-        <option value="720">720p</option>
-        <option value="480">480p</option>
-        <option value="360">360p</option>
+      <label for="url">Video URL</label>
+      <input type="text" id="url" readonly>
+    </div>
+
+    <div class="form-group">
+      <label for="downloadMode">Download Mode</label>
+      <select id="downloadMode">
+        <option value="default" selected>Best Video + Audio (Default)</option>
+        <option value="custom">Custom Resolution</option>
+        <option value="audio">Extract Audio Only</option>
       </select>
     </div>
-    
-    <div class="form-group">
-      <label for="videoFormat">Format</label>
-      <select id="videoFormat">
-        <option value="mp4" selected>MP4</option>
-        <option value="mkv">MKV</option>
-        <option value="webm">WebM</option>
+
+    <div class="row" id="customVideoOptions" style="display: none;">
+      <div class="form-group">
+        <label for="resolution">Max Resolution</label>
+        <select id="resolution">
+          <option value="2160">4K (2160p)</option>
+          <option value="1440">1440p</option>
+          <option value="1080" selected>1080p</option>
+          <option value="720">720p</option>
+          <option value="480">480p</option>
+          <option value="360">360p</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label for="videoFormat">Format</label>
+        <select id="videoFormat">
+          <option value="mp4" selected>MP4</option>
+          <option value="mkv">MKV</option>
+          <option value="webm">WebM</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" id="audioOptions" style="display: none;">
+      <label for="audioFormat">Audio Format</label>
+      <select id="audioFormat">
+        <option value="mp3" selected>MP3</option>
+        <option value="m4a">M4A</option>
+        <option value="flac">FLAC</option>
+        <option value="wav">WAV</option>
       </select>
     </div>
-  </div>
 
-  <div class="form-group" id="audioOptions" style="display: none;">
-    <label for="audioFormat">Audio Format</label>
-    <select id="audioFormat">
-      <option value="mp3" selected>MP3</option>
-      <option value="m4a">M4A</option>
-      <option value="flac">FLAC</option>
-      <option value="wav">WAV</option>
-    </select>
-  </div>
-
-  <div class="form-group checkbox-group" style="margin-top: 12px; margin-bottom: 12px;">
-    <input type="checkbox" id="playlistToggle">
-    <label for="playlistToggle">Download entire playlist</label>
-  </div>
-
-  <div class="row timestamp-row">
-    <div class="form-group">
-      <label for="startTime">Start Time
-        <button id="grabTimeBtn" class="icon-btn" title="Grab current video time">⏱️</button>
-      </label>
-      <input type="text" id="startTime" placeholder="00:00:00">
+    <div class="checkbox-group" style="margin-top: 12px;">
+      <input type="checkbox" id="playlistToggle">
+      <label for="playlistToggle">Download entire playlist</label>
     </div>
-    <div class="form-group">
-      <label for="endTime">End Time</label>
-      <input type="text" id="endTime" placeholder="00:00:00">
+  </div>
+
+  <div class="card">
+    <div class="row timestamp-row">
+      <div class="form-group">
+        <label for="startTime">Start Time
+          <button id="grabTimeBtn" class="pill-btn" title="Grab current video time">Grab ⏱️</button>
+        </label>
+        <input type="text" id="startTime" placeholder="00:00:00">
+      </div>
+      <div class="form-group">
+        <label for="endTime">End Time</label>
+        <input type="text" id="endTime" placeholder="00:00:00">
+      </div>
     </div>
   </div>
 
@@ -163,11 +181,23 @@
     </div>
   </details>
 
-  <div class="output-group">
-    <textarea id="commandOutput" readonly></textarea>
-    <button id="copyBtn" class="primary-btn">Copy Command</button>
+  <!-- Interactive Copy Chip -->
+  <div class="command-chip-container">
+    <div class="command-label">Generated Command</div>
+    <div class="command-chip" id="copyChip">
+      <div class="command-text" id="commandOutputText">yt-dlp "https://..."</div>
+      <div class="copy-icon-wrapper" id="copyIconWrapper">
+        <svg id="iconCopy" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <svg id="iconCheck" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+    </div>
+    <div id="copyFeedback" class="copy-feedback">Copied to clipboard</div>
   </div>
-  <div id="toast" class="toast">Copied!</div>
 
   <script src="popup.js"></script>
 </body>

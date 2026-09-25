@@ -33,12 +33,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   const outputTemplate = document.getElementById('outputTemplate');
 
   // Actions
-  const commandOutput = document.getElementById('commandOutput');
-  const copyBtn = document.getElementById('copyBtn');
+  const commandOutputText = document.getElementById('commandOutputText');
+  const copyChip = document.getElementById('copyChip');
+  const iconCopy = document.getElementById('iconCopy');
+  const iconCheck = document.getElementById('iconCheck');
+  const copyFeedback = document.getElementById('copyFeedback');
+  const copyIconWrapper = document.getElementById('copyIconWrapper');
   const grabTimeBtn = document.getElementById('grabTimeBtn');
-  const toast = document.getElementById('toast');
 
   let currentTab = null;
+  let fullCommand = '';
 
   // 1. Get current URL
   try {
@@ -150,33 +154,29 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 5. Generate Command Logic
   function generateCommand() {
     if (!urlInput.value || urlInput.value.startsWith("Please") || urlInput.value.startsWith("Unable")) {
-      commandOutput.value = "yt-dlp [options] <URL>";
+      fullCommand = "yt-dlp [options] <URL>";
+      commandOutputText.innerText = fullCommand;
       return;
     }
 
     let cmd = ['yt-dlp'];
 
-    // Network & Output
     if (rateLimit.value.trim()) cmd.push(`--limit-rate ${rateLimit.value.trim()}`);
     if (proxy.value.trim()) cmd.push(`--proxy "${proxy.value.trim()}"`);
     if (geoBypass.checked) cmd.push('--geo-bypass');
     if (restrictFilenames.checked) cmd.push('--restrict-filenames');
     if (outputTemplate.value.trim()) cmd.push(`-o "${outputTemplate.value.trim()}"`);
 
-    // Authentication
     if (cookiesBrowser.value) cmd.push(`--cookies-from-browser ${cookiesBrowser.value}`);
     if (authUser.value.trim()) cmd.push(`-u "${authUser.value.trim()}"`);
     if (authPass.value.trim()) cmd.push(`-p "${authPass.value.trim()}"`);
 
-    // Playlist option (Default to --no-playlist if unchecked to prevent huge accidental downloads,
-    // although yt-dlp might prompt or do single video by default on some URLs. Better explicit.)
     if (playlistToggle.checked) {
       cmd.push('--yes-playlist');
     } else {
       cmd.push('--no-playlist');
     }
 
-    // Download Mode: Audio vs Custom vs Default
     const mode = downloadMode.value;
     if (mode === 'audio') {
       cmd.push('-x');
@@ -187,9 +187,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       cmd.push(`-f "bv*[height<=${res}]+ba/b"`);
       cmd.push(`--merge-output-format ${vFormat}`);
     }
-    // If 'default', we pass no format flags, letting yt-dlp do its default (best video+audio)
 
-    // Subtitles & Metadata
     if (embedSubs.checked || writeAutoSubs.checked) cmd.push('--write-subs');
     if (writeAutoSubs.checked) cmd.push('--write-auto-subs');
     if (embedSubs.checked) cmd.push('--embed-subs');
@@ -199,7 +197,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (embedChapters.checked) cmd.push('--embed-chapters');
     if (sponsorBlock.checked) cmd.push('--sponsorblock-remove all');
 
-    // Timestamps
     const start = startTimeInput.value.trim();
     const end = endTimeInput.value.trim();
     if (start || end) {
@@ -208,10 +205,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       cmd.push(`--download-sections "*${startVal}-${endVal}"`);
     }
 
-    // URL
     cmd.push(`"${urlInput.value}"`);
     
-    commandOutput.value = cmd.join(' ');
+    fullCommand = cmd.join(' ');
+    commandOutputText.innerText = fullCommand;
   }
 
   // 6. Event Listeners
@@ -264,12 +261,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 8. Copy to Clipboard
-  copyBtn.addEventListener('click', async () => {
+  // 8. Copy Chip Logic
+  copyChip.addEventListener('click', async () => {
+    if (!fullCommand) return;
     try {
-      await navigator.clipboard.writeText(commandOutput.value);
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
+      await navigator.clipboard.writeText(fullCommand);
+      
+      // Visual feedback
+      iconCopy.style.display = 'none';
+      iconCheck.style.display = 'block';
+      copyIconWrapper.style.backgroundColor = '#10b981'; // Green bg for wrapper
+      copyFeedback.classList.add('show');
+      
+      setTimeout(() => {
+        iconCopy.style.display = 'block';
+        iconCheck.style.display = 'none';
+        copyIconWrapper.style.backgroundColor = '';
+        copyFeedback.classList.remove('show');
+      }, 2000);
+      
     } catch (err) {
       console.error('Failed to copy: ', err);
     }
