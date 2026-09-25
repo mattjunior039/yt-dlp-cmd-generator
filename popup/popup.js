@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const proxy = document.getElementById('proxy');
   const geoBypass = document.getElementById('geoBypass');
   const restrictFilenames = document.getElementById('restrictFilenames');
+  const outputDir = document.getElementById('outputDir');
   const outputTemplate = document.getElementById('outputTemplate');
 
   // Actions
@@ -78,6 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     proxy: '',
     geoBypass: false,
     restrictFilenames: false,
+    outputDir: '',
     outputTemplate: ''
   };
 
@@ -101,6 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     proxy.value = data.proxy;
     geoBypass.checked = data.geoBypass;
     restrictFilenames.checked = data.restrictFilenames;
+    outputDir.value = data.outputDir;
     outputTemplate.value = data.outputTemplate;
   } catch (err) {
     console.error("Failed to load settings:", err);
@@ -144,6 +147,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         proxy: proxy.value,
         geoBypass: geoBypass.checked,
         restrictFilenames: restrictFilenames.checked,
+        outputDir: outputDir.value,
         outputTemplate: outputTemplate.value
       });
     } catch (err) {
@@ -165,6 +169,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (proxy.value.trim()) cmd.push(`--proxy "${proxy.value.trim()}"`);
     if (geoBypass.checked) cmd.push('--geo-bypass');
     if (restrictFilenames.checked) cmd.push('--restrict-filenames');
+    if (outputDir.value.trim()) cmd.push(`-P "${outputDir.value.trim()}"`);
     if (outputTemplate.value.trim()) cmd.push(`-o "${outputTemplate.value.trim()}"`);
 
     if (cookiesBrowser.value) cmd.push(`--cookies-from-browser ${cookiesBrowser.value}`);
@@ -216,7 +221,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     downloadMode, resolutionSelect, videoFormatSelect, audioFormatSelect, playlistToggle,
     startTimeInput, endTimeInput, embedSubs, writeAutoSubs, embedMetadata, embedThumbnail, 
     embedChapters, sponsorBlock, cookiesBrowser, authUser, authPass, rateLimit, proxy, 
-    geoBypass, restrictFilenames, outputTemplate
+    geoBypass, restrictFilenames, outputDir, outputTemplate
   ];
 
   inputs.forEach(input => {
@@ -267,10 +272,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       await navigator.clipboard.writeText(fullCommand);
       
-      // Visual feedback
       iconCopy.style.display = 'none';
       iconCheck.style.display = 'block';
-      copyIconWrapper.style.backgroundColor = '#10b981'; // Green bg for wrapper
+      copyIconWrapper.style.backgroundColor = '#10b981';
       copyFeedback.classList.add('show');
       
       setTimeout(() => {
