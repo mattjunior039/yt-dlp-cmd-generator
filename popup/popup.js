@@ -1,11 +1,15 @@
 document.addEventListener('DOMContentLoaded', async () => {
   // Basic Elements
   const urlInput = document.getElementById('url');
+  
+  const downloadMode = document.getElementById('downloadMode');
+  const customVideoOptions = document.getElementById('customVideoOptions');
   const resolutionSelect = document.getElementById('resolution');
   const videoFormatSelect = document.getElementById('videoFormat');
-  const audioOnlyCheckbox = document.getElementById('audioOnly');
-  const audioFormatGroup = document.getElementById('audioFormatGroup');
+  
+  const audioOptions = document.getElementById('audioOptions');
   const audioFormatSelect = document.getElementById('audioFormat');
+  
   const playlistToggle = document.getElementById('playlistToggle');
   const startTimeInput = document.getElementById('startTime');
   const endTimeInput = document.getElementById('endTime');
@@ -54,11 +58,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 2. Load settings
   const defaultSettings = {
+    downloadMode: 'default',
     resolution: '1080',
     videoFormat: 'mp4',
-    audioOnly: false,
     audioFormat: 'mp3',
-    playlist: true,
+    playlist: false,
     embedSubs: false,
     writeAutoSubs: false,
     embedMetadata: false,
@@ -75,9 +79,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     const data = await chrome.storage.local.get(defaultSettings);
+    downloadMode.value = data.downloadMode;
     resolutionSelect.value = data.resolution;
     videoFormatSelect.value = data.videoFormat;
-    audioOnlyCheckbox.checked = data.audioOnly;
     audioFormatSelect.value = data.audioFormat;
     playlistToggle.checked = data.playlist;
     
@@ -100,19 +104,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 3. UI Update Logic
   function updateUI() {
-    const isAudioOnly = audioOnlyCheckbox.checked;
-    audioFormatGroup.style.display = isAudioOnly ? 'block' : 'none';
-    resolutionSelect.disabled = isAudioOnly;
-    videoFormatSelect.disabled = isAudioOnly;
+    const mode = downloadMode.value;
+    
+    if (mode === 'default') {
+      customVideoOptions.style.display = 'none';
+      audioOptions.style.display = 'none';
+    } else if (mode === 'custom') {
+      customVideoOptions.style.display = 'flex';
+      audioOptions.style.display = 'none';
+    } else if (mode === 'audio') {
+      customVideoOptions.style.display = 'none';
+      audioOptions.style.display = 'block';
+    }
   }
 
   // 4. Save settings
   async function saveSettings() {
     try {
       await chrome.storage.local.set({
+        downloadMode: downloadMode.value,
         resolution: resolutionSelect.value,
         videoFormat: videoFormatSelect.value,
-        audioOnly: audioOnlyCheckbox.checked,
         audioFormat: audioFormatSelect.value,
         playlist: playlistToggle.checked,
         
@@ -156,28 +168,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (authUser.value.trim()) cmd.push(`-u "${authUser.value.trim()}"`);
     if (authPass.value.trim()) cmd.push(`-p "${authPass.value.trim()}"`);
 
-    // Playlist option
+    // Playlist option (Default to --no-playlist if unchecked to prevent huge accidental downloads,
+    // although yt-dlp might prompt or do single video by default on some URLs. Better explicit.)
     if (playlistToggle.checked) {
       cmd.push('--yes-playlist');
     } else {
       cmd.push('--no-playlist');
     }
 
-    // Audio vs Video
-    if (audioOnlyCheckbox.checked) {
+    // Download Mode: Audio vs Custom vs Default
+    const mode = downloadMode.value;
+    if (mode === 'audio') {
       cmd.push('-x');
       cmd.push(`--audio-format ${audioFormatSelect.value}`);
-    } else {
+    } else if (mode === 'custom') {
       const res = resolutionSelect.value;
       const vFormat = videoFormatSelect.value;
-      
-      if (res === 'best') {
-        cmd.push(`-f "bv*+ba/b"`);
-      } else {
-        cmd.push(`-f "bv*[height<=${res}]+ba/b"`);
-      }
+      cmd.push(`-f "bv*[height<=${res}]+ba/b"`);
       cmd.push(`--merge-output-format ${vFormat}`);
     }
+    // If 'default', we pass no format flags, letting yt-dlp do its default (best video+audio)
 
     // Subtitles & Metadata
     if (embedSubs.checked || writeAutoSubs.checked) cmd.push('--write-subs');
@@ -206,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 6. Event Listeners
   const inputs = [
-    resolutionSelect, videoFormatSelect, audioOnlyCheckbox, audioFormatSelect, playlistToggle,
+    downloadMode, resolutionSelect, videoFormatSelect, audioFormatSelect, playlistToggle,
     startTimeInput, endTimeInput, embedSubs, writeAutoSubs, embedMetadata, embedThumbnail, 
     embedChapters, sponsorBlock, cookiesBrowser, authUser, authPass, rateLimit, proxy, 
     geoBypass, restrictFilenames, outputTemplate
