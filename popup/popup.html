@@ -80,6 +80,11 @@
   </div>
 
   <div class="card">
+    <div class="form-group">
+      <label for="outputDir">Output Directory <span style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">(Optional)</span></label>
+      <input type="text" id="outputDir" placeholder="~/Downloads, C:\Videos, etc.">
+    </div>
+
     <div class="row timestamp-row">
       <div class="form-group">
         <label for="startTime">Start Time
@@ -174,10 +179,6 @@
           <input type="checkbox" id="restrictFilenames">
           <label for="restrictFilenames" title="ASCII filenames only">Restrict Filenames</label>
         </div>
-      </div>
-      <div class="form-group" style="margin-top: 8px;">
-        <label for="outputDir" title="Leave blank for current terminal folder">Output Directory</label>
-        <input type="text" id="outputDir" placeholder="~/Downloads">
       </div>
       <div class="form-group" style="margin-top: 8px;">
         <label for="outputTemplate">Custom Output Template</label>
