@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="header">
+    <h2>yt-dlp Generator</h2>
+    <a href="../install.html" target="_blank" class="install-link" title="Installation Guide">ⓘ Install Guide</a>
+  </div>
+  
+  <div class="form-group">
+    <label for="url">Video URL</label>
+    <input type="text" id="url" readonly>
+  </div>
+
+  <div class="row">
+    <div class="form-group">
+      <label for="resolution">Resolution</label>
+      <select id="resolution">
+        <option value="best">Best Available</option>
+        <option value="2160">4K (2160p)</option>
+        <option value="1440">1440p</option>
+        <option value="1080" selected>1080p</option>
+        <option value="720">720p</option>
+        <option value="480">480p</option>
+        <option value="360">360p</option>
+      </select>
+    </div>
+    
+    <div class="form-group">
+      <label for="videoFormat">Video Format</label>
+      <select id="videoFormat">
+        <option value="mp4" selected>MP4</option>
+        <option value="mkv">MKV</option>
+        <option value="webm">WebM</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="form-group checkbox-group">
+      <input type="checkbox" id="audioOnly">
+      <label for="audioOnly">Extract Audio</label>
+    </div>
+    
+    <div class="form-group checkbox-group">
+      <input type="checkbox" id="playlistToggle" checked>
+      <label for="playlistToggle">Download Playlist</label>
+    </div>
+  </div>
+
+  <div class="form-group" id="audioFormatGroup" style="display: none;">
+    <label for="audioFormat">Audio Format</label>
+    <select id="audioFormat">
+      <option value="mp3" selected>MP3</option>
+      <option value="m4a">M4A</option>
+      <option value="flac">FLAC</option>
+      <option value="wav">WAV</option>
+    </select>
+  </div>
+
+  <div class="row timestamp-row">
+    <div class="form-group">
+      <label for="startTime">Start Time
+        <button id="grabTimeBtn" class="icon-btn" title="Grab current video time">⏱️</button>
+      </label>
+      <input type="text" id="startTime" placeholder="00:00:00">
+    </div>
+    <div class="form-group">
+      <label for="endTime">End Time</label>
+      <input type="text" id="endTime" placeholder="00:00:00">
+    </div>
+  </div>
+
+  <!-- Advanced Options Accordion -->
+  <details class="advanced-options">
+    <summary>Advanced Options</summary>
+    <div class="advanced-content">
+      
+      <!-- Metadata & Subs -->
+      <div class="section-title">Metadata & Subtitles</div>
+      <div class="grid-2">
+        <div class="checkbox-group">
+          <input type="checkbox" id="embedSubs">
+          <label for="embedSubs">Embed Subtitles</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="writeAutoSubs">
+          <label for="writeAutoSubs">Auto-generated Subs</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="embedMetadata">
+          <label for="embedMetadata">Embed Metadata</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="embedThumbnail">
+          <label for="embedThumbnail">Embed Thumbnail</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="embedChapters">
+          <label for="embedChapters">Embed Chapters</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="sponsorBlock">
+          <label for="sponsorBlock" title="Removes sponsor segments">Remove Sponsors</label>
+        </div>
+      </div>
+
+      <!-- Authentication -->
+      <div class="section-title">Authentication</div>
+      <div class="form-group">
+        <label for="cookiesBrowser">Cookies from Browser</label>
+        <select id="cookiesBrowser">
+          <option value="">None</option>
+          <option value="chrome">Chrome</option>
+          <option value="firefox">Firefox</option>
+          <option value="edge">Edge</option>
+          <option value="brave">Brave</option>
+          <option value="opera">Opera</option>
+          <option value="safari">Safari</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="form-group">
+          <label for="authUser">Username</label>
+          <input type="text" id="authUser" placeholder="Optional">
+        </div>
+        <div class="form-group">
+          <label for="authPass">Password</label>
+          <input type="password" id="authPass" placeholder="Optional">
+        </div>
+      </div>
+
+      <!-- Network -->
+      <div class="section-title">Network & Output</div>
+      <div class="row">
+        <div class="form-group">
+          <label for="rateLimit">Rate Limit (e.g. 5M, 500K)</label>
+          <input type="text" id="rateLimit" placeholder="Unlimited">
+        </div>
+        <div class="form-group">
+          <label for="proxy">Proxy URL</label>
+          <input type="text" id="proxy" placeholder="http://...">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="checkbox-group">
+          <input type="checkbox" id="geoBypass">
+          <label for="geoBypass">Geo Bypass</label>
+        </div>
+        <div class="checkbox-group">
+          <input type="checkbox" id="restrictFilenames">
+          <label for="restrictFilenames" title="ASCII filenames only">Restrict Filenames</label>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top: 8px;">
+        <label for="outputTemplate">Custom Output Template</label>
+        <input type="text" id="outputTemplate" placeholder="%(title)s.%(ext)s">
+      </div>
+    </div>
+  </details>
+
+  <div class="output-group">
+    <textarea id="commandOutput" readonly></textarea>
+    <button id="copyBtn" class="primary-btn">Copy Command</button>
+  </div>
+  <div id="toast" class="toast">Copied!</div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+:root {
+  --bg-color: #f8f9fa;
+  --text-color: #212529;
+  --input-bg: #ffffff;
+  --input-border: #ced4da;
+  --primary: #0d6efd;
+  --primary-hover: #0b5ed7;
+  --accent: #e9ecef;
+  --border: #dee2e6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-color: #212529;
+    --text-color: #f8f9fa;
+    --input-bg: #343a40;
+    --input-border: #495057;
+    --primary: #0d6efd;
+    --primary-hover: #0b5ed7;
+    --accent: #343a40;
+    --border: #495057;
+  }
+}
+
+body {
+  width: 420px;
+  margin: 0;
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.install-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.install-link:hover {
+  text-decoration: underline;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.row .form-group {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+input[type="text"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 0.9rem;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+}
+
+input[readonly] {
+  background-color: var(--accent);
+  color: var(--text-color);
+  cursor: default;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-group label {
+  margin-bottom: 0;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.checkbox-group input[type="checkbox"] {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  background-color: var(--accent);
+}
+
+/* Advanced Options Accordion */
+.advanced-options {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background-color: var(--input-bg);
+}
+
+.advanced-options summary {
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+  user-select: none;
+}
+
+.advanced-content {
+  padding: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-top: 12px;
+  margin-bottom: 8px;
+}
+.section-title:first-child {
+  margin-top: 0;
+}
+
+.output-group {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.85rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.primary-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.primary-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.toast {
+  visibility: hidden;
+  min-width: 150px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 4px;
+  padding: 10px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.toast.show {
+  visibility: visible;
+  opacity: 1;
+}
